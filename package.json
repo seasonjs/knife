@@ -1,0 +1,64 @@
+{
+  "name": "@seasonjs/knife",
+  "version": "0.0.1",
+  "description": "A JavaScript knife.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist//index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./node": {
+      "types": "./dist/node/index.d.ts",
+      "import": "./dist/node/index.mjs",
+      "require": "./dist/node/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "//": "https://github.com/microsoft/TypeScript/issues/50794#issuecomment-1251278131",
+  "typesVersions": {
+    "*": {
+      "node": [
+        "./dist/node/index.d.ts"
+      ],
+      "*": [
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "compile": "vite build && tsc -p tsconfig.json",
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
+    "preview:coverage": "vite preview --outDir ./coverage"
+  },
+  "keywords": [
+    "log",
+    "logger",
+    "vsocde",
+    "spdlog",
+    "logService"
+  ],
+  "author": "Cyberhan123",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seasonjs/knife.git"
+  },
+  "bugs": {
+    "url": "https://github.com/seasonjs/knife/issues"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.3",
+    "@vitest/coverage-c8": "^0.31.0",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.5",
+    "vitest": "^0.31.0"
+  }
+}
