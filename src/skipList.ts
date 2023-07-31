@@ -4,7 +4,6 @@
  *--------------------------------------------------------------------------------------------*/
 
 
-
 class Node<K, V> {
 	readonly forward: Node<K, V>[];
 	constructor(readonly level: number, readonly key: K, public value: V) {

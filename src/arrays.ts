@@ -164,19 +164,19 @@ export function quickSelect<T>(nth: number, data: T[], compare: Compare<T>): T {
 	}
 }
 
-export function groupBy<T>(data: ReadonlyArray<T>, compare: (a: T, b: T) => number): T[][] {
-	const result: T[][] = [];
-	let currentGroup: T[] | undefined = undefined;
-	for (const element of data.slice(0).sort(compare)) {
-		if (!currentGroup || compare(currentGroup[0], element) !== 0) {
-			currentGroup = [element];
-			result.push(currentGroup);
-		} else {
-			currentGroup.push(element);
-		}
-	}
-	return result;
-}
+// export function groupBy<T>(data: ReadonlyArray<T>, compare: (a: T, b: T) => number): T[][] {
+// 	const result: T[][] = [];
+// 	let currentGroup: T[] | undefined = undefined;
+// 	for (const element of data.slice(0).sort(compare)) {
+// 		if (!currentGroup || compare(currentGroup[0], element) !== 0) {
+// 			currentGroup = [element];
+// 			result.push(currentGroup);
+// 		} else {
+// 			currentGroup.push(element);
+// 		}
+// 	}
+// 	return result;
+// }
 
 interface IMutableSplice<T> extends ISplice<T> {
 	readonly toInsert: T[];

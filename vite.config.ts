@@ -5,14 +5,14 @@ import {builtinModules} from 'node:module'
 export default defineConfig(() => {
   const builtins = builtinModules.filter(e => !e.startsWith('_'));
   builtins.push(...builtins.map(m => `node:${m}`))
-
+  builtins.push("@vscode/windows-process-tree")
   return {
     build: {
       lib: {
         // Could also be a dictionary or array of multiple entry points
         entry: {
-          'index': resolve(__dirname, 'src/index.ts'),
-          'node/index': resolve(__dirname, 'src/node/index.ts')
+          'src/index': resolve(__dirname, 'src/index.ts'),
+          'src/node/index': resolve(__dirname, 'src/node/index.ts')
         },
 
       },

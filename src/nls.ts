@@ -167,74 +167,74 @@ export function create(key: string, data: IBundledStrings & IConsumerAPI): ICons
  * Invoked by the loader at run-time
  * @skipMangle
  */
-export function load(name: string, req: AMDLoader.IRelativeRequire, load: AMDLoader.IPluginLoadCallback, config: AMDLoader.IConfigurationOptions): void {
-	const pluginConfig: INLSPluginConfig = config['./nls'] ?? {};
-	if (!name || name.length === 0) {
-		// TODO: We need to give back the mangled names here
-		return load({
-			localize: localize,
-			getConfiguredDefaultLocale: () => pluginConfig.availableLanguages?.['*']
-		});
-	}
-	const language = pluginConfig.availableLanguages ? findLanguageForModule(pluginConfig.availableLanguages, name) : null;
-	const useDefaultLanguage = language === null || language === DEFAULT_TAG;
-	let suffix = '.nls';
-	if (!useDefaultLanguage) {
-		suffix = suffix + '.' + language;
-	}
-	const messagesLoaded = (messages: string[] | IBundledStrings) => {
-		if (Array.isArray(messages)) {
-			(messages as any as IConsumerAPI).localize = createScopedLocalize(messages);
-		} else {
-			(messages as any as IConsumerAPI).localize = createScopedLocalize(messages[name]);
-		}
-		(messages as any as IConsumerAPI).getConfiguredDefaultLocale = () => pluginConfig.availableLanguages?.['*'];
-		load(messages);
-	};
-	if (typeof pluginConfig.loadBundle === 'function') {
-		(pluginConfig.loadBundle as BundleLoader)(name, language, (err: Error, messages) => {
-			// We have an error. Load the English default strings to not fail
-			if (err) {
-				req([name + '.nls'], messagesLoaded);
-			} else {
-				messagesLoaded(messages);
-			}
-		});
-	} else if (pluginConfig.translationServiceUrl && !useDefaultLanguage) {
-		(async () => {
-			try {
-				const messages = await getMessagesFromTranslationsService(pluginConfig.translationServiceUrl!, language, name);
-				return messagesLoaded(messages);
-			} catch (err) {
-				// Language is already as generic as it gets, so require default messages
-				if (!language.includes('-')) {
-					console.error(err);
-					return req([name + '.nls'], messagesLoaded);
-				}
-				try {
-					// Since there is a dash, the language configured is a specific sub-language of the same generic language.
-					// Since we were unable to load the specific language, try to load the generic language. Ex. we failed to find a
-					// Swiss German (de-CH), so try to load the generic German (de) messages instead.
-					const genericLanguage = language.split('-')[0];
-					const messages = await getMessagesFromTranslationsService(pluginConfig.translationServiceUrl!, genericLanguage, name);
-					// We got some messages, so we configure the configuration to use the generic language for this session.
-					pluginConfig.availableLanguages ??= {};
-					pluginConfig.availableLanguages['*'] = genericLanguage;
-					return messagesLoaded(messages);
-				} catch (err) {
-					console.error(err);
-					return req([name + '.nls'], messagesLoaded);
-				}
-			}
-		})();
-	} else {
-		req([name + suffix], messagesLoaded, (err: Error) => {
-			if (suffix === '.nls') {
-				console.error('Failed trying to load default language strings', err);
-				return;
-			}
-			console.error(`Failed to load message bundle for language ${language}. Falling back to the default language:`, err);
-			req([name + '.nls'], messagesLoaded);
-		});
-	}
-}
+// export function load(name: string, req: AMDLoader.IRelativeRequire, load: AMDLoader.IPluginLoadCallback, config: AMDLoader.IConfigurationOptions): void {
+// 	const pluginConfig: INLSPluginConfig = config['./nls'] ?? {};
+// 	if (!name || name.length === 0) {
+// 		// TODO: We need to give back the mangled names here
+// 		return load({
+// 			localize: localize,
+// 			getConfiguredDefaultLocale: () => pluginConfig.availableLanguages?.['*']
+// 		});
+// 	}
+// 	const language = pluginConfig.availableLanguages ? findLanguageForModule(pluginConfig.availableLanguages, name) : null;
+// 	const useDefaultLanguage = language === null || language === DEFAULT_TAG;
+// 	let suffix = '.nls';
+// 	if (!useDefaultLanguage) {
+// 		suffix = suffix + '.' + language;
+// 	}
+// 	const messagesLoaded = (messages: string[] | IBundledStrings) => {
+// 		if (Array.isArray(messages)) {
+// 			(messages as any as IConsumerAPI).localize = createScopedLocalize(messages);
+// 		} else {
+// 			(messages as any as IConsumerAPI).localize = createScopedLocalize(messages[name]);
+// 		}
+// 		(messages as any as IConsumerAPI).getConfiguredDefaultLocale = () => pluginConfig.availableLanguages?.['*'];
+// 		load(messages);
+// 	};
+// 	if (typeof pluginConfig.loadBundle === 'function') {
+// 		(pluginConfig.loadBundle as BundleLoader)(name, language, (err: Error, messages) => {
+// 			// We have an error. Load the English default strings to not fail
+// 			if (err) {
+// 				req([name + '.nls'], messagesLoaded);
+// 			} else {
+// 				messagesLoaded(messages);
+// 			}
+// 		});
+// 	} else if (pluginConfig.translationServiceUrl && !useDefaultLanguage) {
+// 		(async () => {
+// 			try {
+// 				const messages = await getMessagesFromTranslationsService(pluginConfig.translationServiceUrl!, language, name);
+// 				return messagesLoaded(messages);
+// 			} catch (err) {
+// 				// Language is already as generic as it gets, so require default messages
+// 				if (!language.includes('-')) {
+// 					console.error(err);
+// 					return req([name + '.nls'], messagesLoaded);
+// 				}
+// 				try {
+// 					// Since there is a dash, the language configured is a specific sub-language of the same generic language.
+// 					// Since we were unable to load the specific language, try to load the generic language. Ex. we failed to find a
+// 					// Swiss German (de-CH), so try to load the generic German (de) messages instead.
+// 					const genericLanguage = language.split('-')[0];
+// 					const messages = await getMessagesFromTranslationsService(pluginConfig.translationServiceUrl!, genericLanguage, name);
+// 					// We got some messages, so we configure the configuration to use the generic language for this session.
+// 					pluginConfig.availableLanguages ??= {};
+// 					pluginConfig.availableLanguages['*'] = genericLanguage;
+// 					return messagesLoaded(messages);
+// 				} catch (err) {
+// 					console.error(err);
+// 					return req([name + '.nls'], messagesLoaded);
+// 				}
+// 			}
+// 		})();
+// 	} else {
+// 		req([name + suffix], messagesLoaded, (err: Error) => {
+// 			if (suffix === '.nls') {
+// 				console.error('Failed trying to load default language strings', err);
+// 				return;
+// 			}
+// 			console.error(`Failed to load message bundle for language ${language}. Falling back to the default language:`, err);
+// 			req([name + '.nls'], messagesLoaded);
+// 		});
+// 	}
+// }

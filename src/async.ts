@@ -418,6 +418,7 @@ export class ThrottledDelayer<T> {
 
 	dispose(): void {
 		this.delayer.dispose();
+		this.throttler.dispose();
 	}
 }
 

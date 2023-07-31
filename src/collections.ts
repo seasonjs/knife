@@ -102,4 +102,12 @@ export class SetMap<K, V> {
 
 		values.forEach(fn);
 	}
+
+	get(key: K): ReadonlySet<V> {
+		const values = this.map.get(key);
+		if (!values) {
+			return new Set<V>();
+		}
+		return new Set(values);
+	}
 }

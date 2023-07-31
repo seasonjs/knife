@@ -8,7 +8,7 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "baseUrl": "./src",
-    "declarationDir": "./dist",
+    "declarationDir": "./dist/src",
     "esModuleInterop": true,
     "lib": [
       "dom",

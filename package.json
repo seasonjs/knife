@@ -10,14 +10,14 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist//index.mjs",
-      "require": "./dist/index.js"
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.mjs",
+      "require": "./dist/src/index.js"
     },
     "./node": {
-      "types": "./dist/node/index.d.ts",
-      "import": "./dist/node/index.mjs",
-      "require": "./dist/node/index.js"
+      "types": "./dist/src/node/index.d.ts",
+      "import": "./dist/src/node/index.mjs",
+      "require": "./dist/src/node/index.js"
     },
     "./package.json": "./package.json"
   },
@@ -25,10 +25,10 @@
   "typesVersions": {
     "*": {
       "node": [
-        "./dist/node/index.d.ts"
+        "./dist/src/node/index.d.ts"
       ],
       "*": [
-        "./dist/index.d.ts"
+        "./dist/src/index.d.ts"
       ]
     }
   },
@@ -36,7 +36,10 @@
     "compile": "vite build && tsc -p tsconfig.json",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "preview:coverage": "vite preview --outDir ./coverage"
+    "preview:coverage": "vite preview --outDir ./coverage",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "keywords": [
     "log",
@@ -55,10 +58,18 @@
     "url": "https://github.com/seasonjs/knife/issues"
   },
   "devDependencies": {
-    "@types/node": "^18.16.3",
-    "@vitest/coverage-c8": "^0.31.0",
-    "typescript": "^5.0.4",
-    "vite": "^4.3.5",
-    "vitest": "^0.31.0"
+    "@types/node": "^20.4.5",
+    "@types/yauzl": "^2.9.1",
+    "@types/yazl": "^2.4.2",
+    "@vitest/coverage-c8": "^0.33.0",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.7",
+    "vitepress": "1.0.0-beta.7",
+    "vitest": "^0.33.0"
+  },
+  "dependencies": {
+    "@vscode/windows-process-tree": "^0.5.0",
+    "yauzl": "^2.9.2",
+    "yazl": "^2.4.3"
   }
 }
